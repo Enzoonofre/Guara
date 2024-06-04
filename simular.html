@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style-simular.css">
+    <title>Document</title>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Cadastro de Jogadores</h2>
+        <button class="btn-cadastrar" type="button" onclick="cadastrarJogo()">Cadastrar Jogo</button>
+        <div id="jogo-container" class="jogo-container"></div>
+    </div>
+
+    <script>
+        // Função para cadastrar o jogo
+        function cadastrarJogo() {
+            const jogadores = obterJogadores();
+            const container = document.getElementById("jogo-container");
+
+            const form = document.createElement("form");
+
+            let html = `
+                <table>
+                    <tr>
+                        <td>Equipe A - Jogador 1</td>
+                        <td>
+                            <select name="equipeA_jogador1" required>
+                                ${jogadores.map(jogador => `<option value="${jogador.nome}">${jogador.nome}</option>`).join('')}
+                            </select>
+                        </td>
+                        <td>Equipe B - Jogador 1</td>
+                        <td>
+                            <select name="equipeB_jogador1" required>
+                                ${jogadores.map(jogador => `<option value="${jogador.nome}">${jogador.nome}</option>`).join('')}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Equipe A - Jogador 2</td>
+                        <td>
+                            <select name="equipeA_jogador2" required>
+                                ${jogadores.map(jogador => `<option value="${jogador.nome}">${jogador.nome}</option>`).join('')}
+                            </select>
+                        </td>
+                        <td>Equipe B - Jogador 2</td>
+                        <td>
+                            <select name="equipeB_jogador2" required>
+                                ${jogadores.map(jogador => `<option value="${jogador.nome}">${jogador.nome}</option>`).join('')}
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+                <button type="submit">Salvar Jogo</button>
+                <div id="jogo"></div>
+            `;
+
+            form.innerHTML = html;
+            container.innerHTML = ''; // Limpa o conteúdo anterior
+            container.appendChild(form);
+            form.addEventListener("submit", salvarJogo);
+        }
+
+        // Função para simular obtenção de jogadores (substitua por sua lógica real)
+        function obterJogadores() {
+            return [
+                { nome: "Jogador 1" },
+                { nome: "Jogador 2" },
+                { nome: "Jogador 3" },
+                { nome: "Jogador 4" }
+            ];
+        }
+
+        // Função para processar o envio do formulário
+        function salvarJogo(event) {
+            event.preventDefault(); // Evita o envio padrão do formulário
+            const formData = new FormData(event.target);
+            const equipeA_jogador1 = formData.get("equipeA_jogador1");
+            const equipeA_jogador2 = formData.get("equipeA_jogador2");
+            const equipeB_jogador1 = formData.get("equipeB_jogador1");
+            const equipeB_jogador2 = formData.get("equipeB_jogador2");
+            console.log("Equipe A - Jogador 1:", equipeA_jogador1);
+            console.log("Equipe A - Jogador 2:", equipeA_jogador2);
+            console.log("Equipe B - Jogador 1:", equipeB_jogador1);
+            console.log("Equipe B - Jogador 2:", equipeB_jogador2);
+            criarTabelaJogo(equipeA_jogador1, equipeA_jogador2, equipeB_jogador1, equipeB_jogador2);
+        }
+
+        function criarTabelaJogo(equipeA_jogador1, equipeA_jogador2, equipeB_jogador1, equipeB_jogador2) {
+    const container = document.getElementById("jogo");
+
+    const table = document.createElement("table");
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Equipe A</th>
+                <th>Equipe B</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>${equipeA_jogador1}</td>
+                <td>${equipeB_jogador1}</td>
+            </tr>
+            <tr>
+                <td>${equipeA_jogador2}</td>
+                <td>${equipeB_jogador2}</td>
+            </tr>
+            <tr>
+                <td><input type="number" class="pontosEquipeA" value="0" min="0"></td>
+                <td><input type="number" class="pontosEquipeB" value="0" min="0"></td>
+            </tr>
+        </tbody>
+    `;
+
+    // Adiciona um botão de remoção de jogo
+    const removerBotao = document.createElement("button");
+    removerBotao.textContent = "Remover Jogo";
+    removerBotao.addEventListener("click", function() {
+        const jogoContainer = removerBotao.closest('.jogo-container');
+        container.removeChild(jogoContainer);
+    });
+
+    const jogoContainer = document.createElement("div");
+    jogoContainer.classList.add("jogo-container");
+    jogoContainer.appendChild(table);
+    jogoContainer.appendChild(removerBotao);
+
+    container.appendChild(jogoContainer);
+}
+
+    </script>
+
+</body>
+</html>
